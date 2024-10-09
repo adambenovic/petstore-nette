@@ -1,0 +1,22 @@
+services:
+  php:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/var/www/html        # Mount code for live editing
+      - ./docker/php/php.ini:/usr/local/etc/php/conf.d/php.ini  # Custom PHP settings
+    expose:
+      - 9000
+    environment:
+      XDEBUG_MODE: "debug,develop"  # Enable Xdebug for development if needed
+
+  nginx:
+    image: nginx:alpine
+    volumes:
+      - .:/var/www/html
+      - ./docker/nginx/conf.d:/etc/nginx/conf.d
+    ports:
+      - "8080:80"
+    depends_on:
+      - php
