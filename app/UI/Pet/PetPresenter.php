@@ -4,12 +4,23 @@ declare(strict_types = 1);
 
 namespace App\UI\Pet;
 
+use App\Core\Entity\EntityFactory;
+use App\Core\Entity\Pet;
 use Nette;
 use Nette\Application\Attributes\Requires;
 use Nette\Application\Responses\JsonResponse;
+use Nette\Application\Responses\TextResponse;
 
 final class PetPresenter extends Nette\Application\UI\Presenter
 {
+    private EntityFactory $entityFactory;
+
+    public function __construct(EntityFactory $entityFactory)
+    {
+        parent::__construct();
+        $this->entityFactory = $entityFactory;
+    }
+
     #[Requires(methods: ['POST'])]
     public function actionCreatePet(): void
     {
@@ -19,13 +30,18 @@ final class PetPresenter extends Nette\Application\UI\Presenter
 
         //TODO validate data
 
-        $pet = [];
-
-        foreach ($data as $key => $value) {
-            $pet[$key] = $value;
-        }
+        /** @var Pet $pet */
+        $pet = $this->entityFactory->create($data, Pet::class);
 
         $this->getHttpResponse()->setCode(Nette\Http\IResponse::S201_Created);
+
+        $acceptHeader = $request->getHeader('accept');
+        $xml = $pet->toXML();
+
+        if ($acceptHeader === 'application/xml') {
+            $this->sendResponse(new TextResponse($xml));
+        }
+
         $this->sendResponse(new JsonResponse($pet));
     }
 

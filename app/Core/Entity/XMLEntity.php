@@ -7,7 +7,7 @@ namespace App\Core\Entity;
 use Exception;
 use SimpleXMLElement;
 
-abstract class XMLEntity implements DatabaseEntity
+abstract class XMLEntity implements Entity
 {
     public const string XML_PATH = 'database.xml';
 
@@ -16,8 +16,6 @@ abstract class XMLEntity implements DatabaseEntity
     abstract public function getXMLName(): string;
 
     abstract public function getXMLData(): array;
-
-    abstract public function load(): void;
 
     public function getXMLPath(): ?string
     {

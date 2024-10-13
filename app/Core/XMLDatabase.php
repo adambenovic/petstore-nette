@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace App\Core;
 
-use App\Core\Entity\DatabaseEntity;
+use App\Core\Entity\Entity;
 use SimpleXMLElement;
 
 final class XMLDatabase
 {
     protected int $id;
 
-    public function save(DatabaseEntity $entity): void
+    public function save(Entity $entity): void
     {
         $path = $entity->getXMLPath();
         $xml = $this->loadXML($path);
