@@ -22,6 +22,8 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 RUN echo "display_errors = On" >> /usr/local/etc/php/conf.d/docker-php.ini \
     && echo "error_reporting = E_ALL" >> /usr/local/etc/php/conf.d/docker-php.ini
 
+RUN mkdir /var/www/html/log && mkdir /var/www/html/temp && chmod -R a+rw /var/www/html/temp /var/www/html/log
+
 # Expose port for PHP-FPM
 EXPOSE 9000
 
